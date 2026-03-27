@@ -26,15 +26,15 @@
     --nav-color: #555;
   }
   [data-theme="dark"] {
-    --bg: #1c1c1a;
-    --bg-surface: #242420;
-    --bg-card: #242420;
-    --bg-header: rgba(24,24,22,0.92);
-    --text: #e4e2dd;
-    --text-muted: #8a8880;
-    --text-subtle: #46443f;
-    --border: rgba(255,255,255,0.07);
-    --nav-color: #9a9890;
+    --bg: #141413;
+    --bg-surface: #1e1e1b;
+    --bg-card: #1e1e1b;
+    --bg-header: rgba(18,18,16,0.92);
+    --text: #f0eeea;
+    --text-muted: #a8a49c;
+    --text-subtle: #5a564e;
+    --border: rgba(255,255,255,0.10);
+    --nav-color: #b0aca4;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -148,18 +148,20 @@
     display: flex; align-items: center; justify-content: center;
     padding: clamp(80px, 10vh, 120px) clamp(16px, 4vw, 48px);
     position: relative; z-index: 1;
-    overflow: hidden;
+    overflow: visible;
   }
 
   /* Fullscreen dithering canvas background */
   .hero-dither-canvas {
-    position: absolute; inset: 0;
-    width: 100%; height: 100%;
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 130%;
     pointer-events: none; z-index: 0;
     opacity: 0.38;
     mix-blend-mode: multiply;
     filter: blur(40px);
     transition: opacity 0.8s ease, filter 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
   }
   .hero-dither-canvas.sharp {
     filter: blur(0px);
@@ -241,13 +243,14 @@
   /* ─── Location card ─── */
   .hero-location {
     position: relative; z-index: 1;
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 7px 14px 7px 10px;
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 8px 18px 8px 14px;
     border-radius: 100px;
-    border: 1px solid rgba(0,0,0,0.07);
-    background: rgba(255,255,255,0.22);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    font-size: 12.5px; font-weight: 500; color: #444;
+    border: 1px solid color-mix(in srgb, var(--accent, #2563EB) 18%, rgba(0,0,0,0.06));
+    background: color-mix(in srgb, var(--accent, #2563EB) 7%, rgba(255,255,255,0.12));
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 2px 14px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.4);
+    font-size: 13px; font-weight: 600; color: var(--text);
     letter-spacing: 0.01em;
     margin-bottom: clamp(20px, 2.5vw, 36px);
     opacity: 0; transform: translateY(16px);
@@ -256,22 +259,28 @@
   }
   .hero-card.visible .hero-location { opacity: 1; transform: translateY(0); }
   .hero-location-pin {
-    width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
-    background: rgba(0,0,0,0.06);
+    flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
+    animation: location-pulse 15s ease-in-out infinite;
   }
-  .hero-location-pin svg { width: 11px; height: 11px; color: #555; }
+  .hero-location-pin svg { width: 14px; height: 14px; color: var(--accent, #2563EB); }
+  @keyframes location-pulse {
+    0%, 4%, 100% { transform: scale(1) translateY(0); }
+    1% { transform: scale(1.18) translateY(-2px); }
+    2% { transform: scale(1) translateY(0); }
+    2.8% { transform: scale(1.10) translateY(-1px); }
+  }
   .hero-location-dot {
     width: 5px; height: 5px; border-radius: 50%;
     background: #22c55e; flex-shrink: 0; margin-left: 2px;
   }
   [data-theme="dark"] .hero-location {
-    background: rgba(255,255,255,0.06);
-    border-color: rgba(255,255,255,0.1);
-    color: #aaa;
+    background: color-mix(in srgb, var(--accent, #2563EB) 10%, rgba(255,255,255,0.04));
+    border-color: color-mix(in srgb, var(--accent, #2563EB) 22%, rgba(255,255,255,0.06));
+    box-shadow: 0 2px 14px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.06);
+    color: var(--text);
   }
-  [data-theme="dark"] .hero-location-pin { background: rgba(255,255,255,0.08); }
-  [data-theme="dark"] .hero-location-pin svg { color: #aaa; }
+  [data-theme="dark"] .hero-location-pin svg { color: var(--accent, #60A5FA); }
 
   /* Hero headline */
   .hero-headline {
@@ -279,7 +288,7 @@
     font-size: clamp(36px, 6vw, 80px); font-weight: 400;
     line-height: 1.05; letter-spacing: -0.03em;
     text-align: left;
-    margin-bottom: clamp(16px, 2vw, 32px);
+    margin-bottom: clamp(6px, 0.8vw, 12px);
     opacity: 0; transform: translateY(20px);
     transition: opacity 0.6s ease 0.35s, transform 0.6s ease 0.35s;
   }
@@ -312,9 +321,9 @@
     position: relative;
     display: inline-flex; align-items: center; justify-content: center;
     padding: 15px 32px;
-    background: color-mix(in srgb, var(--accent, #EC4E02) 7%, rgba(255,255,255,0.12));
+    background: color-mix(in srgb, var(--accent, #2563EB) 7%, rgba(255,255,255,0.12));
     color: var(--text);
-    border: 1px solid color-mix(in srgb, var(--accent, #EC4E02) 18%, rgba(0,0,0,0.06));
+    border: 1px solid color-mix(in srgb, var(--accent, #2563EB) 18%, rgba(0,0,0,0.06));
     border-radius: 12px;
     font-size: 15px; font-weight: 600; letter-spacing: 0.01em;
     text-decoration: none; cursor: pointer;
@@ -543,7 +552,27 @@
   .me-eyeline-svg { animation: me-line-loop 2.8s ease-in-out infinite; }
   @keyframes me-blink-loop { 0%, 88%, 96%, 100% { opacity: 0; } 91%, 93% { opacity: 1; } }
   @keyframes me-line-loop { 0%, 88%, 96%, 100% { opacity: 0; } 91%, 93% { opacity: 0.6; } }
-  .about-right { display: flex; flex-direction: column; gap: 24px; }
+  .about-right {
+    display: flex; flex-direction: column; gap: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: clamp(24px, 3vw, 36px);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.6);
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease, background 0.3s ease;
+  }
+  .about-right:hover {
+    box-shadow: 0 14px 44px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6);
+  }
+  [data-theme="dark"] .about-right {
+    background: #252420;
+    border-color: rgba(255,255,255,0.12);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+  [data-theme="dark"] .about-right:hover {
+    background: #2c2b26;
+    box-shadow: 0 14px 44px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.07);
+  }
   .about-profile {
     display: flex; align-items: center; gap: 14px;
   }
@@ -570,9 +599,9 @@
     position: relative;
     display: inline-flex; align-items: center; justify-content: center;
     padding: 15px 32px;
-    background: color-mix(in srgb, var(--accent, #EC4E02) 7%, rgba(255,255,255,0.12));
+    background: color-mix(in srgb, var(--accent, #2563EB) 7%, rgba(255,255,255,0.12));
     color: var(--text);
-    border: 1px solid color-mix(in srgb, var(--accent, #EC4E02) 18%, rgba(0,0,0,0.06));
+    border: 1px solid color-mix(in srgb, var(--accent, #2563EB) 18%, rgba(0,0,0,0.06));
     border-radius: 12px;
     font-size: 15px; font-weight: 600; letter-spacing: 0.01em;
     text-decoration: none; cursor: pointer;
@@ -585,8 +614,8 @@
   .about-cta:hover { transform: scale(1.04); box-shadow: 0 8px 28px rgba(0,0,0,0.13), inset 0 1px 0 rgba(255,255,255,0.4); }
   .about-cta:active { transform: scale(0.97); transition-duration: 0.1s; }
   [data-theme="dark"] .about-cta {
-    background: color-mix(in srgb, var(--accent, #EC4E02) 10%, rgba(255,255,255,0.04));
-    border-color: color-mix(in srgb, var(--accent, #EC4E02) 22%, rgba(255,255,255,0.06));
+    background: color-mix(in srgb, var(--accent, #2563EB) 10%, rgba(255,255,255,0.04));
+    border-color: color-mix(in srgb, var(--accent, #2563EB) 22%, rgba(255,255,255,0.06));
     box-shadow: 0 2px 14px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.06);
   }
   [data-theme="dark"] .about-cta:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08); }
@@ -599,7 +628,7 @@
   /* ─── Scroll snap desktop ─── */
   @media (min-width: 900px) {
     html { scroll-snap-type: y mandatory; }
-    .hero { scroll-snap-align: start; height: 100vh; min-height: unset; overflow: hidden; }
+    .hero { scroll-snap-align: start; height: 100vh; min-height: unset; overflow: visible; }
     .about-section { scroll-snap-align: start; height: 100vh; overflow: hidden; }
     .features-section { scroll-snap-align: start; height: 100vh; overflow: hidden; }
   }
@@ -675,13 +704,13 @@
     z-index: 3;
   }
   [data-theme="dark"] .bento-card {
-    background: #2e2d28;
-    border-color: rgba(255,255,255,0.11);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.06);
+    background: #252420;
+    border-color: rgba(255,255,255,0.12);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
   }
   [data-theme="dark"] .bento-card:hover {
-    background: #333129;
-    box-shadow: 0 14px 44px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06);
+    background: #2c2b26;
+    box-shadow: 0 14px 44px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.07);
   }
 
   /* grid placement */
@@ -700,7 +729,7 @@
   /* card content */
   .bento-label {
     font-size: 10px; font-weight: 700; letter-spacing: 0.07em;
-    color: var(--accent, #EC4E02); margin-bottom: 4px;
+    color: var(--accent, #2563EB); margin-bottom: 4px;
   }
   .bento-title {
     font-size: clamp(14px, 1.35vw, 18px); font-weight: 600;
@@ -711,7 +740,7 @@
   /* big number */
   .bento-big-num {
     font-size: clamp(52px, 6vw, 86px); font-weight: 700;
-    letter-spacing: -0.05em; color: var(--accent, #EC4E02); line-height: 1;
+    letter-spacing: -0.05em; color: var(--accent, #2563EB); line-height: 1;
   }
 
   /* weather debug button */
@@ -1561,7 +1590,7 @@ const topNav = document.getElementById('topNav');
     { name: 'Rose',    hex: '#E11D8A', rgb: [0.882, 0.114, 0.541], darkHex: '#FF72C8', darkRgb: [1.0,   0.447, 0.784] },
     { name: 'Grün',    hex: '#16A34A', rgb: [0.086, 0.639, 0.290], darkHex: '#4ADE80', darkRgb: [0.290, 0.871, 0.502] },
     { name: 'Cyan',    hex: '#0891B2', rgb: [0.031, 0.569, 0.698], darkHex: '#22D3EE', darkRgb: [0.133, 0.827, 0.933] },
-    { name: 'Blau',    hex: '#2563EB', rgb: [0.145, 0.388, 0.922], darkHex: '#60A5FA', darkRgb: [0.376, 0.647, 0.980] },
+    { name: 'Blau',    hex: '#2563EB', rgb: [0.145, 0.388, 0.922], darkHex: '#2563EB', darkRgb: [0.145, 0.388, 0.922] },
     { name: 'Violett', hex: '#7C3AED', rgb: [0.486, 0.227, 0.929], darkHex: '#A78BFA', darkRgb: [0.655, 0.545, 0.980] },
   ];
   var STORAGE_KEY = 'blinzle-accent';
@@ -1612,7 +1641,7 @@ const topNav = document.getElementById('topNav');
 
   // Init from saved or default (orange = index 1)
   var saved = parseInt(localStorage.getItem(STORAGE_KEY));
-  var initIndex = (!isNaN(saved) && saved >= 0 && saved < PALETTE.length) ? saved : 1;
+  var initIndex = (!isNaN(saved) && saved >= 0 && saved < PALETTE.length) ? saved : 6;
   setTimeout(function() { applyAccent(initIndex, false); }, 50);
 
   // Toggle palette open/close
@@ -2146,7 +2175,7 @@ const topNav = document.getElementById('topNav');
       if (num >= 100) { num = 100; _perfDone = true; }
       var str = String(num);
       var scaleX = 0.065, scaleY = 0.090;
-      var charW = 5.5; // tighter spacing between digits
+      var charW = 4.8; // tighter spacing between digits
       var totalW = str.length * charW - 0.5;
       var startX = 0.5 - (totalW * scaleX) / 2;
       var startY = 0.08;
@@ -2240,19 +2269,18 @@ const topNav = document.getElementById('topNav');
     },
 
     bgHost: function(nx, ny, t) {
-      // Retro landline phone on cradle, vibrating
+      // Retro landline phone on cradle – only handset vibrates
       var v = 0;
       var cx = 0.50, cy = 0.28;
 
-      // Vibration (intermittent ring pattern)
+      // Vibration (intermittent ring pattern) – applied to handset only
       var ringOn = (Math.sin(t*1.5)+1)*0.5; // ring cycle
       var vibX = Math.sin(t*22) * 0.006 * ringOn;
       var vibY = Math.cos(t*28) * 0.003 * ringOn;
-      var px = cx + vibX, py = cy + vibY;
 
-      // ── Base/cradle ── flat wide rectangle
+      // ── Base/cradle ── stays still (no vibration)
       var bw=0.28, bh=0.04;
-      var bx=px-bw/2, by=py+0.08;
+      var bx=cx-bw/2, by=cy+0.08;
       v = Math.max(v, lv(nx,ny, bx,by, bx+bw,by, 0.010));
       v = Math.max(v, lv(nx,ny, bx,by+bh, bx+bw,by+bh, 0.010));
       v = Math.max(v, lv(nx,ny, bx,by, bx,by+bh, 0.010));
@@ -2261,7 +2289,7 @@ const topNav = document.getElementById('topNav');
       v = Math.max(v, lv(nx,ny, bx+0.04,by-0.02, bx+0.04,by, 0.008));
       v = Math.max(v, lv(nx,ny, bx+bw-0.04,by-0.02, bx+bw-0.04,by, 0.008));
       // Dial/buttons area on base
-      var dialCx=px, dialCy=by+bh*0.5;
+      var dialCx=cx, dialCy=by+bh*0.5;
       for(var di=0;di<3;di++){
         for(var dj=0;dj<3;dj++){
           var dx2=dialCx-0.03+dj*0.03;
@@ -2271,8 +2299,8 @@ const topNav = document.getElementById('topNav');
         }
       }
 
-      // ── Handset (receiver) ── the classic curved shape sitting on cradle
-      var hx = px, hy = py - 0.02;
+      // ── Handset (receiver) ── vibrates on the cradle
+      var hx = cx + vibX, hy = cy - 0.02 + vibY;
 
       // Earpiece (left bulge)
       var earCx=hx-0.10, earCy=hy;
@@ -2297,7 +2325,7 @@ const topNav = document.getElementById('topNav');
 
       // ── Coiled cord from handset to base ──
       var cordStartX=hx+0.06, cordStartY=hy+0.02;
-      var cordEndX=px+0.08, cordEndY=by;
+      var cordEndX=cx+0.08, cordEndY=by;
       for(var ci=0;ci<6;ci++){
         var ct=ci/5;
         var ccx=cordStartX+(cordEndX-cordStartX)*ct+Math.sin(ct*8+t*0.5)*0.012;
@@ -2424,7 +2452,8 @@ async function run() {
 
   await wait(30);
 
-  // 1. First blink opens
+  // 1. First blink opens (slight delay, then opens)
+  await wait(150);
   await animateEyelids(1, 0, 400, 'easeOut');
   await wait(600);
 
@@ -2458,13 +2487,32 @@ async function run() {
   if (ditherCanvas) ditherCanvas.classList.add('sharp');
   document.body.classList.remove('locked');
 
-  // Slide cover and intro logo upward together
+  // Slide cover upward
   introCover.style.transition = 'transform 0.85s cubic-bezier(0.76, 0, 0.24, 1)';
   introCover.style.transform = 'translateY(-100%)';
-  logoIntro.style.transition = 'transform 0.85s cubic-bezier(0.76, 0, 0.24, 1)';
-  logoIntro.style.transform = 'translate(-50%, calc(-50% - 100vh))';
 
-  await wait(950);
+  // Animate intro logo upward with progressive blur + fade
+  logoIntro.style.transition = 'none';
+  await new Promise(resolve => {
+    const dur = 850;
+    const start = performance.now();
+    function tick(now) {
+      let t = Math.min(1, (now - start) / dur);
+      // cubic-bezier(0.76, 0, 0.24, 1) approximation
+      const e = t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
+      const y = -e * 100; // vh offset
+      const blur = e * 24; // max 24px blur
+      const opacity = Math.max(0, 1 - e * 2.5); // fades out faster
+      const scale = 1 - e * 0.4; // shrinks to 0.6
+      logoIntro.style.transform = `translate(-50%, calc(-50% + ${y}vh)) scale(${scale})`;
+      logoIntro.style.filter = `blur(${blur}px)`;
+      logoIntro.style.opacity = opacity;
+      if (t < 1) requestAnimationFrame(tick); else resolve();
+    }
+    requestAnimationFrame(tick);
+  });
+
+  await wait(100);
 
   // Clean up after slide
   logoIntro.classList.add('settled');
@@ -2502,37 +2550,15 @@ function onScroll() {
   const headerBlurStart = heroH * 0.35;
   const headerBlurEnd = heroH * 0.65;
 
-  // Header logo: always visible after intro
-  if (scrollY < headerBlurStart) {
-    if (isInHeader) {
-      isInHeader = false;
-      iDotHeader.classList.remove('blink-dot-loop');
-    }
-    logoHeader.style.opacity = '1';
-    logoHeader.style.filter = 'blur(0px)';
-    logoHeader.style.transform = 'scale(1)';
-    header.classList.add('visible');
-  } else if (scrollY <= headerBlurEnd) {
-    const p = (scrollY - headerBlurStart) / (headerBlurEnd - headerBlurStart);
-    const blur = 14 * (1 - p);
-    const scale = 1.06 - 0.06 * p;
-    logoHeader.style.opacity = p;
-    logoHeader.style.filter = `blur(${blur}px)`;
-    logoHeader.style.transform = `scale(${scale})`;
-    header.classList.add('visible');
-    if (!isInHeader) {
-      isInHeader = true;
-      iDotHeader.classList.add('blink-dot-loop');
-    }
-  } else {
-    logoHeader.style.opacity = '1';
-    logoHeader.style.filter = 'blur(0px)';
-    logoHeader.style.transform = 'scale(1)';
-    header.classList.add('visible');
-    if (!isInHeader) {
-      isInHeader = true;
-      iDotHeader.classList.add('blink-dot-loop');
-    }
+  // Header logo: always visible after intro, no opacity fade
+  logoHeader.style.opacity = '1';
+  logoHeader.style.filter = 'blur(0px)';
+  logoHeader.style.transform = 'scale(1)';
+  header.classList.add('visible');
+
+  // i-dot always blinks when header is visible
+  if (!iDotHeader.classList.contains('blink-dot-loop')) {
+    iDotHeader.classList.add('blink-dot-loop');
   }
 }
 
